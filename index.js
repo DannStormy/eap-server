@@ -5,6 +5,7 @@ const fileUpload = require('express-fileupload');
 
 require('dotenv').config()
 
+const adminRoute = require('./src/routes/admin_route');
 const applicantRoute = require('./src/routes/applicant_route');
 
 
@@ -20,7 +21,7 @@ app.use(cors({
 
 }));
 
-
+app.use(adminRoute);
 app.use(applicantRoute);
 
 app.listen(port, () => {
