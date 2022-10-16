@@ -1,1 +1,1 @@
-DROP TABLE applicants IF EXISTS;
+DROP TABLE applicants;
