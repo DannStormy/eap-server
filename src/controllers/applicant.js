@@ -32,7 +32,6 @@ const login = async (req, res) => {
     try {
         const existingEmail = await db.any(queries.findByEmail, [email]);
         const applicant = await db.any(queries.getApplicantByEmail, [email]);
-        console.log(applicant)
         if (existingEmail.length === 0) {
             return res.status(404).json({
                 status: 'Failed',
@@ -109,7 +108,6 @@ const dashboardPic = async (req, res) => {
     try {
         let email = req.body.email
         const profilepic = await db.any(queries.getProfilePic, [email])
-        console.log(profilepic[0].created_at)
         return res.status(200).json({
             statud: 'Success',
             data: profilepic

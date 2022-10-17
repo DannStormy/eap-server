@@ -12,7 +12,7 @@ const queries = {
         findByEmail: `SELECT email FROM applicants WHERE email = $1;`,
         findApplicationByEmail: `SELECT email, applied FROM application_data WHERE email = $1`,
         getApplicantByEmail: `SELECT email, password FROM applicants WHERE email = $1`,
-        getProfilePic: `SELECT firstname, lastname, email, profilepic, date(created_at), applied FROM application_data WHERE email = $1`
+        getProfilePic: `SELECT firstname, lastname, email, profilepic, created_at, applied FROM application_data WHERE email = $1`
 
 }
 

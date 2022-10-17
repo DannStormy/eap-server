@@ -7,7 +7,6 @@ const queries = require('../queries/admin_queries.js');
 const fetchApplications = async (req, res) => {
     try {
         const applications = await db.any(queries.getAllApplications)
-        console.log(applications)
         return res.status(200).json({
             status: 'Success',
             message: 'Applications returned',
