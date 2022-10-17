@@ -1,0 +1,1 @@
+ALTER TABLE application_data ADD COLUMN applicant_id VARCHAR UNIQUE references applicants(email);

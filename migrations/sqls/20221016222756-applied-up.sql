@@ -1,0 +1,1 @@
+ALTER TABLE application_data ADD COLUMN applied BOOLEAN;

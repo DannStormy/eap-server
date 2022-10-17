@@ -32,6 +32,7 @@ const login = async (req, res) => {
     try {
         const existingEmail = await db.any(queries.findByEmail, [email]);
         const applicant = await db.any(queries.getApplicantByEmail, [email]);
+        console.log(applicant)
         if (existingEmail.length === 0) {
             return res.status(404).json({
                 status: 'Failed',
@@ -71,10 +72,13 @@ const login = async (req, res) => {
 
 const apply = async (req, res) => {
     try {
-        let file = JSON.stringify(req.files.file.data).toString('base64');
-        let image = JSON.stringify(req.files.image.data).toString('base64');
-        let { firstName, lastName, email, address, dob, university, cgpa, course, user_id } = req.body
-
+        let { firstName, lastName, email, address, dob, university, cgpa, course, file, image, user_id } = req.body
+        if (!user_id) {
+            return res.status(401).json({
+                status: 'Failed',
+                message: 'Please login',
+            })
+        }
         const findApplication = await db.any(queries.findApplicationByEmail, [email]);
         if (findApplication.length > 0) {
             return res.status(400).json({
@@ -82,21 +86,41 @@ const apply = async (req, res) => {
                 message: 'User already applied'
             })
         }
-        // const originalObj = JSON.parse(zlib.unzipSync(Buffer.from(zip, 'base64')));
-
-        const application = await db.any(queries.registerApplication, [firstName, lastName, email, address, dob, university, cgpa, course, file, image, user_id])
-        return res.status(201).json({
-            status: 'Success',
-            message: 'Application Successful',
-            data: application
-        })
+        let applied = true;
+        try {
+            const application = await db.any(queries.registerApplication, [firstName, lastName, email, address, dob, university, cgpa, course, file, image, user_id, applied])
+            return res.status(201).json({
+                status: 'Success',
+                message: 'Application Successful',
+                data: application
+            })
+        } catch (error) {
+            return res.status(400).json({
+                status: 'Failed',
+                message: 'Already applied'
+            })
+        }
     } catch (error) {
         console.log(error)
         return error;
-
+    }
+}
+const dashboardPic = async (req, res) => {
+    try {
+        let email = req.body.email
+        const profilepic = await db.any(queries.getProfilePic, [email])
+        console.log(profilepic[0].created_at)
+        return res.status(200).json({
+            statud: 'Success',
+            data: profilepic
+        })
+    } catch (error) {
+        console.log(error)
+        return error
     }
 }
 
+
 module.exports = {
-    signup, login, apply
+    signup, login, apply, dashboardPic
 }

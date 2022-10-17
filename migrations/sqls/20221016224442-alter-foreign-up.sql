@@ -1,0 +1,1 @@
+ALTER TABLE application_data DROP COLUMN applicant_id;
