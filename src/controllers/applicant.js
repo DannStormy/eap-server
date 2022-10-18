@@ -53,15 +53,28 @@ const login = async (req, res) => {
             },
             process.env.JWT_SECRET_KEY
         );
-        delete applicant[0].password
-        return res.status(200).json({
-            status: 'Success',
-            message: 'Logged In Successfully',
-            data: {
-                applicant,
-                token: sessionToken
-            }
-        })
+        const findApplication = await db.any(queries.findApplicationByEmail, [email]);
+        if (findApplication.length > 0) {
+            delete applicant[0].password
+            return res.status(200).json({
+                status: 'Success',
+                message: 'Logged In Successfully',
+                data: {
+                    applicant,
+                    token: sessionToken
+                }
+            })
+        } else {
+            return res.status(200).json({
+                status: 'Success',
+                message: 'New User',
+                data: {
+                    applicant,
+                    token: sessionToken
+                }
+            })
+        }
+
     } catch (err) {
         console.log(err)
         return err;
@@ -85,9 +98,11 @@ const apply = async (req, res) => {
                 message: 'User already applied'
             })
         }
-        let applied = true;
         try {
-            const application = await db.any(queries.registerApplication, [firstName, lastName, email, address, dob, university, cgpa, course, file, image, user_id, applied])
+            const application = await db.any(queries.registerApplication, [firstName, lastName, email, dob, address, university, course, cgpa, file, image, user_id])
+            let status = false;
+            let batch_id = 'Enyata Academy 6.0'
+            await db.any(queries.registerApplicationStatus, [email, status, batch_id]);
             return res.status(201).json({
                 status: 'Success',
                 message: 'Application Successful',
