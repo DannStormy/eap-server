@@ -100,7 +100,7 @@ const apply = async (req, res) => {
         }
         try {
             const application = await db.any(queries.registerApplication, [firstName, lastName, email, dob, address, university, course, cgpa, file, image, user_id])
-            let status = false;
+            let status = null;
             let batch_id = 'Enyata Academy 6.0'
             await db.any(queries.registerApplicationStatus, [email, status, batch_id]);
             return res.status(201).json({
@@ -123,9 +123,11 @@ const dashboardPic = async (req, res) => {
     try {
         let email = req.body.email
         const profilepic = await db.any(queries.getProfilePic, [email])
+        const status = await db.any(queries.getStatus, [email])
         return res.status(200).json({
             statud: 'Success',
-            data: profilepic
+            data: profilepic,
+            applicantStatus: status
         })
     } catch (error) {
         console.log(error)

@@ -82,6 +82,22 @@ const createApplication = async (req, res) => {
     }
 }
 
+const updateApplicantStatus = async (req, res) => {
+    try {
+        let { status, applicant_id } = req.body
+        console.log(req.body)
+        await db.any(` UPDATE
+        application_status
+        SET
+        status = ${status}
+        WHERE
+        applicant_id = '${applicant_id}'
+        RETURNING *;`)
+    } catch (error) {
+        console.log(error)
+        return error
+    }
+}
 module.exports = {
-    fetchApplications, createApplication, adminLogin, getAdminDetails
+    fetchApplications, createApplication, adminLogin, getAdminDetails, updateApplicantStatus
 }
