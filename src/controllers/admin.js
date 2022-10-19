@@ -75,7 +75,27 @@ const fetchApplications = async (req, res) => {
 
 const createApplication = async (req, res) => {
     try {
+        let { batch_id, date, instructions, question } = req.body
+        // console.log(`Question: '${JSON.stringify(question)}'`)
         console.log(req.body)
+        const application = await db.any(queries.createApplication, [batch_id, date, instructions, question])
+        res.status(200).json({
+            status: 'success',
+            message: 'application created',
+            application: application
+        })
+    } catch (error) {
+        console.log(error)
+        return error
+    }
+}
+
+const getAllQuestions = async (req, res) => {
+    try {
+        const questions = await db.any(queries.getAllQuestions)
+        res.json({
+            questions: questions
+        })
     } catch (error) {
         console.log(error)
         return error
@@ -98,6 +118,36 @@ const updateApplicantStatus = async (req, res) => {
         return error
     }
 }
+
+const getAdminDashboardDetails = async (req, res) => {
+    try {
+        const currentBatch = await db.any(queries.getCurrentBatch)
+        const details = await db.any(queries.getAdminDashboardDetails)
+        const currentBatchCount = await db.any(queries.getCurrentBatchCount, [currentBatch[0].max])
+        const updates = await db.any(queries.getUpdates)
+        const approved = await db.any(queries.getApprovedCount)
+        console.log(updates)
+        res.status(200).json({
+            message: 'success',
+            allDetails: {
+                currentBatchCount: currentBatchCount,
+                allBatchCount: details,
+                currentBatch: currentBatch,
+                updates: updates,
+                approved: approved
+            }
+        })
+    } catch (error) {
+        console.log(error)
+        return error
+    }
+}
 module.exports = {
-    fetchApplications, createApplication, adminLogin, getAdminDetails, updateApplicantStatus
+    fetchApplications,
+    createApplication,
+    adminLogin,
+    getAdminDetails,
+    updateApplicantStatus,
+    getAllQuestions,
+    getAdminDashboardDetails
 }
