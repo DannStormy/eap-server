@@ -19,7 +19,9 @@ const queries = {
     getCurrentBatch: `SELECT max(batch_id) FROM application_status;`,
     getCurrentBatchCount: `SELECT count(*) FROM application_status WHERE batch_id = $1`,
     getUpdates: `SELECT * FROM current_edition`,
-    getApprovedCount: `SELECT count(*) FROM application_status WHERE status = true;`
+    getApprovedCount: `SELECT count(*) FROM application_status WHERE status = true;`,
+    getClosureDate: `SELECT date FROM current_edition ORDER BY date DESC LIMIT 1`,
+    getAllAssessments: `SELECT * FROM assessment`
 }
 
 module.exports = queries;

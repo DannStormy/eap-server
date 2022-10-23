@@ -135,7 +135,24 @@ const dashboardPic = async (req, res) => {
     }
 }
 
+const updateAssessmentStatus = async (req, res) => {
+    try {
+        let email = req.body.email
+        const status = await db.any(` UPDATE
+        application_data
+        SET
+        taken_assessment = ${true}
+        WHERE
+        email = '${email}'
+        RETURNING taken_assessment;`)
+        return res.json({
+            taken_assessment: status
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 module.exports = {
-    signup, login, apply, dashboardPic
+    signup, login, apply, dashboardPic, updateAssessmentStatus
 }

@@ -142,6 +142,29 @@ const getAdminDashboardDetails = async (req, res) => {
         return error
     }
 }
+
+const applicationClosure = async (req, res) => {
+    try {
+        const closure = await db.any(queries.getClosureDate)
+        res.status(200).json({
+            closure: closure
+        })
+    } catch (error) {
+        console.log(error)
+        return error
+    }
+}
+const getAllAssessments = async (req, res) => {
+    try {
+        const assessments = await db.any(queries.getAllAssessments);
+        res.json({
+            assessments: assessments
+        })
+    } catch (error) {
+        console.log(error)
+        return error
+    }
+}
 module.exports = {
     fetchApplications,
     createApplication,
@@ -149,5 +172,7 @@ module.exports = {
     getAdminDetails,
     updateApplicantStatus,
     getAllQuestions,
-    getAdminDashboardDetails
+    getAdminDashboardDetails,
+    applicationClosure,
+    getAllAssessments
 }
