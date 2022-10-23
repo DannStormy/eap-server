@@ -101,7 +101,7 @@ const apply = async (req, res) => {
         try {
             const application = await db.any(queries.registerApplication, [firstName, lastName, email, dob, address, university, course, cgpa, file, image, user_id])
             let status = null;
-            let batch_id = 'Enyata Academy 6.0'
+            let batch_id = await db.any(queries.getCurrentBatch);
             await db.any(queries.registerApplicationStatus, [email, status, batch_id]);
             return res.status(201).json({
                 status: 'Success',

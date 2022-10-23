@@ -1,6 +1,13 @@
 const queries = {
     getAllApplications: `
-            SELECT * FROM application_data
+            SELECT 
+                * 
+            FROM 
+                application_data 
+            LEFT JOIN 
+                application_status 
+            ON 
+                email = application_status.applicant_id
     `,
     findByEmail: `SELECT email FROM admin WHERE email = $1;`,
     getAdminByEmail: `SELECT email, password FROM admin WHERE email = $1`,

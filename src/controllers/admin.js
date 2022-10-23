@@ -76,8 +76,6 @@ const fetchApplications = async (req, res) => {
 const createApplication = async (req, res) => {
     try {
         let { batch_id, date, instructions, question } = req.body
-        // console.log(`Question: '${JSON.stringify(question)}'`)
-        console.log(req.body)
         const application = await db.any(queries.createApplication, [batch_id, date, instructions, question])
         res.status(200).json({
             status: 'success',

@@ -25,7 +25,8 @@ const queries = {
                 VALUES ($1, $2, $3)
                 RETURNING *;
         `,
-        checkAssessmentStatus: `SELECT taken_assessment from application_data WHERE id = $1`
+        checkAssessmentStatus: `SELECT taken_assessment from application_data WHERE id = $1`,
+        getCurrentBatch: `SELECT max(batch_id) FROM application_status;`,
 }
 
 module.exports = queries;
