@@ -76,7 +76,8 @@ const fetchApplications = async (req, res) => {
 const createApplication = async (req, res) => {
     try {
         let { batch_id, date, instructions, question } = req.body
-        const application = await db.any(queries.createApplication, [batch_id, date, instructions, question])
+        const questions = JSON.stringify(question)
+        const application = await db.any(queries.createApplication, [batch_id, date, instructions, questions])
         res.status(200).json({
             status: 'success',
             message: 'application created',
@@ -166,7 +167,8 @@ const getAllAssessments = async (req, res) => {
 
 const composeAssessment = async (req, res) => {
     try {
-        const assessments = await db.any(queries.composeAssessment, [req.body.questions]);
+        const questions = JSON.stringify(req.body.questions)
+        const assessments = await db.any(queries.composeAssessment, questions);
         res.json({
             success: 'Assessment set',
             data: assessments

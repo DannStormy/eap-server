@@ -153,6 +153,18 @@ const updateAssessmentStatus = async (req, res) => {
     }
 }
 
+const getAssessment = async (req, res) => {
+    try {
+        const assessment = await db.any(queries.getAssessment);
+        res.json({
+            quiz: assessment
+        })
+    } catch (error) {
+        console.log(error)
+        return error
+    }
+}
+
 module.exports = {
-    signup, login, apply, dashboardPic, updateAssessmentStatus
+    signup, login, apply, dashboardPic, updateAssessmentStatus, getAssessment
 }

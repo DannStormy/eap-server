@@ -9,6 +9,7 @@ router.post('/applicant/login', applicant.login);
 router.post('/applicant/apply', checkAuth, applicant.apply);
 router.post('/applicant/dashboard', applicant.dashboardPic);
 router.post('/applicant/assessment-status', applicant.updateAssessmentStatus)
+router.get('/applicant/get-assessment', applicant.getAssessment)
 
 
 module.exports = router;
