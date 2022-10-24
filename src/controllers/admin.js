@@ -163,6 +163,19 @@ const getAllAssessments = async (req, res) => {
         return error
     }
 }
+
+const composeAssessment = async (req, res) => {
+    try {
+        const assessments = await db.any(queries.composeAssessment, [req.body.questions]);
+        res.json({
+            success: 'Assessment set',
+            data: assessments
+        })
+    } catch (error) {
+        console.log(error)
+        return error
+    }
+}
 module.exports = {
     fetchApplications,
     createApplication,
@@ -172,5 +185,6 @@ module.exports = {
     getAllQuestions,
     getAdminDashboardDetails,
     applicationClosure,
-    getAllAssessments
+    getAllAssessments,
+    composeAssessment
 }

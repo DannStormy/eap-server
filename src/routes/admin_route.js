@@ -10,6 +10,7 @@ router.post('/admin/create-application', admin.createApplication);
 router.get('/admin/create-application', admin.getAllQuestions);
 router.post('/admin/login', admin.adminLogin);
 router.post('/admin/admin-details', admin.getAdminDetails);
-router.post('/admin/status', admin.updateApplicantStatus)
+router.post('/admin/status', admin.updateApplicantStatus);
+router.post('/admin/compose-assessment', admin.composeAssessment);
 
 module.exports = router;

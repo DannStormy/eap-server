@@ -28,7 +28,8 @@ const queries = {
     getUpdates: `SELECT * FROM current_edition`,
     getApprovedCount: `SELECT count(*) FROM application_status WHERE status = true;`,
     getClosureDate: `SELECT date FROM current_edition ORDER BY date DESC LIMIT 1`,
-    getAllAssessments: `SELECT * FROM assessment`
+    getAllAssessments: `SELECT * FROM assessment`,
+    composeAssessment: `INSERT into assessment (docs) VALUES ($1) RETURNING *`
 }
 
 module.exports = queries;
