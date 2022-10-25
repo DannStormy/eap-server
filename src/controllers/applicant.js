@@ -165,6 +165,25 @@ const getAssessment = async (req, res) => {
     }
 }
 
+const setScore = async (req, res) => {
+    console.log(req.body)
+    try {
+        let { result, user } = req.body;
+        await db.any(`UPDATE
+        application_status
+        SET
+        test_score = ${result}
+        WHERE
+        applicant_id = '${user}'`)
+        res.json({
+            message: 'Score Updated'
+        })
+    } catch (error) {
+        console.log(error)
+        return error
+    }
+}
 module.exports = {
-    signup, login, apply, dashboardPic, updateAssessmentStatus, getAssessment
+    signup, login, apply, dashboardPic, updateAssessmentStatus, getAssessment, setScore
+
 }

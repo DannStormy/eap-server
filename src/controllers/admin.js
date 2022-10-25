@@ -105,7 +105,7 @@ const updateApplicantStatus = async (req, res) => {
     try {
         let { status, applicant_id } = req.body
         console.log(req.body)
-        await db.any(` UPDATE
+        await db.any(`UPDATE
         application_status
         SET
         status = ${status}
@@ -188,5 +188,5 @@ module.exports = {
     getAdminDashboardDetails,
     applicationClosure,
     getAllAssessments,
-    composeAssessment
+    composeAssessment,
 }
