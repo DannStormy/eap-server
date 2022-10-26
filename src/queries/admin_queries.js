@@ -15,9 +15,9 @@ const queries = {
     getAllQuestions: `SELECT * FROM assessment`,
     createApplication: `
     INSERT INTO 
-        current_edition(batch_id, date, instructions, questions)
+        current_edition(batch_id, date, instructions, questions, time)
     VALUES
-        ($1, $2, $3, $4)
+        ($1, $2, $3, $4, $5)
     RETURNING *;
     `,
     getAdminDashboardDetails: `
@@ -29,7 +29,7 @@ const queries = {
     getApprovedCount: `SELECT count(*) FROM application_status WHERE status = true;`,
     getClosureDate: `SELECT date FROM current_edition ORDER BY date DESC LIMIT 1`,
     getAllAssessments: `SELECT * FROM assessment`,
-    composeAssessment: `INSERT into assessment (docs) VALUES ($1) RETURNING *`
+    composeAssessment: `INSERT into assessment (docs, time) VALUES ($1, $2) RETURNING *`
 }
 
 module.exports = queries;

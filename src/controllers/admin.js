@@ -75,9 +75,10 @@ const fetchApplications = async (req, res) => {
 
 const createApplication = async (req, res) => {
     try {
-        let { batch_id, date, instructions, question } = req.body
+        console.log(req.body)
+        let { batch_id, date, instructions, question, time } = req.body
         const questions = JSON.stringify(question)
-        const application = await db.any(queries.createApplication, [batch_id, date, instructions, questions])
+        const application = await db.any(queries.createApplication, [batch_id, date, instructions, questions, time])
         res.status(200).json({
             status: 'success',
             message: 'application created',
@@ -125,7 +126,7 @@ const getAdminDashboardDetails = async (req, res) => {
         const currentBatchCount = await db.any(queries.getCurrentBatchCount, [currentBatch[0].max])
         const updates = await db.any(queries.getUpdates)
         const approved = await db.any(queries.getApprovedCount)
-        console.log(updates)
+        // console.log(updates)
         res.status(200).json({
             message: 'success',
             allDetails: {
@@ -167,8 +168,9 @@ const getAllAssessments = async (req, res) => {
 
 const composeAssessment = async (req, res) => {
     try {
+        console.log(req.body)
         const questions = JSON.stringify(req.body.questions)
-        const assessments = await db.any(queries.composeAssessment, questions);
+        const assessments = await db.any(queries.composeAssessment, [questions, req.body.timer]);
         res.json({
             success: 'Assessment set',
             data: assessments

@@ -164,6 +164,17 @@ const getAssessment = async (req, res) => {
         return error
     }
 }
+const getTime = async (req, res) => {
+    try {
+        const time = await db.any(queries.getTime);
+        res.json({
+            time: time
+        })
+    } catch (error) {
+        console.log(error)
+        return error
+    }
+}
 
 const setScore = async (req, res) => {
     console.log(req.body)
@@ -184,6 +195,12 @@ const setScore = async (req, res) => {
     }
 }
 module.exports = {
-    signup, login, apply, dashboardPic, updateAssessmentStatus, getAssessment, setScore
-
+    signup,
+    login,
+    apply,
+    dashboardPic,
+    updateAssessmentStatus,
+    getAssessment,
+    setScore,
+    getTime
 }
