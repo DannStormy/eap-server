@@ -23,6 +23,13 @@ const queries = {
     getAdminDashboardDetails: `
         SELECT count(*) FROM application_status;
     `,
+    createAdmin: `
+    INSERT INTO 
+        admin(name, email, country, address, profilepic, phone)
+    VALUES
+        ($1, $2, $3, $4, $5, $6)
+    RETURNING *
+    `,
     getCurrentBatch: `SELECT max(batch_id) FROM application_status;`,
     getCurrentBatchCount: `SELECT count(*) FROM application_status WHERE batch_id = $1`,
     getUpdates: `SELECT * FROM current_edition`,

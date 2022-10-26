@@ -4,6 +4,17 @@ const jwt = require("jsonwebtoken");
 const db = require('../config/config.js');
 const queries = require('../queries/admin_queries.js');
 
+const createAdmin = async (req, res) => {
+    try {
+        let { fn, email, country, address, profilepic, phone } = req.body
+        await db.any(queries.createAdmin, [fn, email, country, address, profilepic, phone])
+        console.log(req.body)
+    } catch (error) {
+        console.log(error)
+        return error
+    }
+}
+
 const adminLogin = async (req, res) => {
     try {
         let { email, password } = req.body;
@@ -181,6 +192,7 @@ const composeAssessment = async (req, res) => {
     }
 }
 module.exports = {
+    createAdmin,
     fetchApplications,
     createApplication,
     adminLogin,

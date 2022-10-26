@@ -8,6 +8,7 @@ router.get('/admin/dashboard', admin.getAdminDashboardDetails);
 router.get('/admin/get-assessments', admin.getAllAssessments);
 router.post('/admin/create-application', admin.createApplication);
 router.get('/admin/create-application', admin.getAllQuestions);
+router.post('/admin/create-admin', admin.createAdmin);
 router.post('/admin/login', admin.adminLogin);
 router.post('/admin/admin-details', admin.getAdminDetails);
 router.post('/admin/status', admin.updateApplicantStatus);
