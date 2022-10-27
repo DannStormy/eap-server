@@ -84,6 +84,7 @@ const login = async (req, res) => {
 
 const apply = async (req, res) => {
     try {
+
         let { firstName, lastName, email, address, dob, university, cgpa, course, file, image, user_id } = req.body
         if (!user_id) {
             return res.status(401).json({
@@ -92,6 +93,7 @@ const apply = async (req, res) => {
             })
         }
         const findApplication = await db.any(queries.findApplicationByEmail, [email]);
+        console.log(findApplication)
         if (findApplication.length > 0) {
             return res.status(400).json({
                 status: 'Failed',
@@ -101,7 +103,8 @@ const apply = async (req, res) => {
         try {
             const application = await db.any(queries.registerApplication, [firstName, lastName, email, dob, address, university, course, cgpa, file, image, user_id])
             let status = null;
-            let batch_id = await db.any(queries.getCurrentBatch);
+            let batch = await db.any(queries.getCurrentBatch);
+            let batch_id = batch[0].max.slice(batch[0].max.indexOf('E'), batch[0].max.indexOf('0') + 1)
             await db.any(queries.registerApplicationStatus, [email, status, batch_id]);
             return res.status(201).json({
                 status: 'Success',
@@ -111,7 +114,7 @@ const apply = async (req, res) => {
         } catch (error) {
             return res.status(400).json({
                 status: 'Failed',
-                message: 'Already applied'
+                message: 'Something went wrong'
             })
         }
     } catch (error) {
