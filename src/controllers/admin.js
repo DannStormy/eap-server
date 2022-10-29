@@ -83,6 +83,19 @@ const fetchApplications = async (req, res) => {
         return err;
     }
 }
+const fetchApplicationsByBatch = async (req, res) => {
+    try {
+        const applications = await db.any(queries.getApplicantsByBatch, [req.body.batch])
+        return res.status(200).json({
+            status: 'Success',
+            message: 'Applications returned',
+            data: applications
+        })
+    } catch (err) {
+        console.log(err)
+        return err;
+    }
+}
 
 const createApplication = async (req, res) => {
     try {
@@ -179,7 +192,6 @@ const getAllAssessments = async (req, res) => {
 
 const composeAssessment = async (req, res) => {
     try {
-        console.log(req.body)
         const questions = JSON.stringify(req.body.questions)
         const assessments = await db.any(queries.composeAssessment, [questions, req.body.timer]);
         res.json({
@@ -189,6 +201,17 @@ const composeAssessment = async (req, res) => {
     } catch (error) {
         console.log(error)
         return error
+    }
+}
+
+const getAllBatches = async (req, res) => {
+    try {
+        const batches = await db.any(queries.getAllBatches)
+        res.json({
+            batches: batches
+        })
+    } catch (error) {
+
     }
 }
 module.exports = {
@@ -203,4 +226,6 @@ module.exports = {
     applicationClosure,
     getAllAssessments,
     composeAssessment,
+    getAllBatches,
+    fetchApplicationsByBatch
 }

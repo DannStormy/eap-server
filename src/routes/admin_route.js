@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const admin = require('../controllers/admin.js');
 
-router.get('/admin/application-closure', admin.applicationClosure)
+router.get('/admin/application-closure', admin.applicationClosure);
+router.get('/admin/all_batches', admin.getAllBatches);
 router.get('/admin/application-entries', admin.fetchApplications);
+router.post('/admin/application-by-batch', admin.fetchApplicationsByBatch);
 router.get('/admin/dashboard', admin.getAdminDashboardDetails);
 router.get('/admin/get-assessments', admin.getAllAssessments);
 router.post('/admin/create-application', admin.createApplication);

@@ -9,6 +9,15 @@ const queries = {
             ON 
                 email = application_status.applicant_id
     `,
+    getApplicantsByBatch: `
+            SELECT
+                *
+            FROM
+                application_data
+                LEFT JOIN application_status ON email = application_status.applicant_id
+            WHERE
+                batch_id = $1
+    `,
     findByEmail: `SELECT email FROM admin WHERE email = $1;`,
     getAdminByEmail: `SELECT email, password FROM admin WHERE email = $1`,
     getAdminDetails: `SELECT * FROM admin WHERE email = $1`,
@@ -32,6 +41,7 @@ const queries = {
     `,
     getCurrentBatch: `SELECT max(batch_id) FROM application_status;`,
     getCurrentBatchCount: `SELECT count(*) FROM application_status WHERE batch_id = $1`,
+    getAllBatches: `SELECT batch_id from current_edition`,
     getUpdates: `SELECT * FROM current_edition`,
     getApprovedCount: `SELECT count(*) FROM application_status WHERE status = true;`,
     getClosureDate: `SELECT date FROM current_edition ORDER BY date DESC LIMIT 1`,
