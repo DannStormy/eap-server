@@ -104,7 +104,7 @@ const apply = async (req, res) => {
             const application = await db.any(queries.registerApplication, [firstName, lastName, email, dob, address, university, course, cgpa, file, image, user_id])
             let status = null;
             let batch = await db.any(queries.getCurrentBatch);
-            let batch_id = batch[0].max.slice(batch[0].max.indexOf('E'), batch[0].max.indexOf('0') + 1)
+            let batch_id = batch[0].max
             await db.any(queries.registerApplicationStatus, [email, status, batch_id]);
             return res.status(201).json({
                 status: 'Success',
@@ -158,7 +158,9 @@ const updateAssessmentStatus = async (req, res) => {
 
 const getAssessment = async (req, res) => {
     try {
-        const assessment = await db.any(queries.getAssessment);
+        let batch = await db.any(queries.getCurrentBatch);
+        let batch_id = batch[0].max
+        const assessment = await db.any(queries.getAssessment, [batch_id]);
         res.json({
             quiz: assessment
         })
