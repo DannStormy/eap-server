@@ -39,7 +39,7 @@ const queries = {
         ($1, $2, $3, $4, $5, $6)
     RETURNING *
     `,
-    getCurrentBatch: `SELECT max(batch_id) FROM application_status;`,
+    getCurrentBatch: `SELECT max(batch_id) FROM current_edition;`,
     getCurrentBatchCount: `SELECT count(*) FROM application_status WHERE batch_id = $1`,
     getAllBatches: `SELECT batch_id from current_edition`,
     getUpdates: `SELECT * FROM current_edition`,

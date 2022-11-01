@@ -26,9 +26,9 @@ const queries = {
                 RETURNING *;
         `,
         checkAssessmentStatus: `SELECT taken_assessment from application_data WHERE id = $1`,
-        getCurrentBatch: `SELECT max(batch_id) FROM application_status;`,
+        getCurrentBatch: `SELECT max(batch_id) FROM current_edition;`,
         getAssessment: `SELECT questions FROM current_edition WHERE batch_id = $1`,
-        getTime: `SELECT time FROM current_edition`,
+        getTime: `SELECT time FROM current_edition WHERE batch_id = $1`,
 }
 
 module.exports = queries;

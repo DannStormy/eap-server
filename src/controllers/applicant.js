@@ -33,7 +33,7 @@ const login = async (req, res) => {
         const existingEmail = await db.any(queries.findByEmail, [email]);
         const applicant = await db.any(queries.getApplicantByEmail, [email]);
         if (existingEmail.length === 0) {
-            return res.status(404).json({
+            return res.status(401).json({
                 status: 'Failed',
                 message: 'No user with this email'
             })
@@ -171,7 +171,10 @@ const getAssessment = async (req, res) => {
 }
 const getTime = async (req, res) => {
     try {
-        const time = await db.any(queries.getTime);
+        let batch = await db.any(queries.getCurrentBatch);
+        let batch_id = batch[0].max
+        console.log(batch)
+        const time = await db.any(queries.getTime, [batch_id]);
         res.json({
             time: time
         })
@@ -182,7 +185,7 @@ const getTime = async (req, res) => {
 }
 
 const setScore = async (req, res) => {
-    console.log(req.body)
+    // console.log(req.body)
     try {
         let { result, user } = req.body;
         await db.any(`UPDATE
