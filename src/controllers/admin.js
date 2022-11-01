@@ -8,7 +8,10 @@ const createAdmin = async (req, res) => {
     try {
         let { fn, email, country, address, profilepic, phone } = req.body
         await db.any(queries.createAdmin, [fn, email, country, address, profilepic, phone])
-        console.log(req.body)
+        return res.json({
+            message: 'Admin saved'
+        })
+        // console.log(req.body)
     } catch (error) {
         console.log(error)
         return error
