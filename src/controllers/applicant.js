@@ -100,23 +100,23 @@ const apply = async (req, res) => {
                 message: 'User already applied'
             })
         }
-        try {
-            const application = await db.any(queries.registerApplication, [firstName, lastName, email, dob, address, university, course, cgpa, file, image, user_id])
-            let status = null;
-            let batch = await db.any(queries.getCurrentBatch);
-            let batch_id = batch[0].max
-            await db.any(queries.registerApplicationStatus, [email, status, batch_id]);
-            return res.status(201).json({
-                status: 'Success',
-                message: 'Application Successful',
-                data: application
-            })
-        } catch (error) {
+        const checkUserEmail = await db.any(`SELECT email FROM applicants WHERE email = '${email}'`)
+        if (checkUserEmail.length === 0) {
             return res.status(400).json({
                 status: 'Failed',
-                message: 'Something went wrong'
+                message: 'Email unrecognized, apply with registered email'
             })
         }
+        const application = await db.any(queries.registerApplication, [firstName, lastName, email, dob, address, university, course, cgpa, file, image, user_id])
+        let status = null;
+        let batch = await db.any(queries.getCurrentBatch);
+        let batch_id = batch[0].max
+        await db.any(queries.registerApplicationStatus, [email, status, batch_id]);
+        return res.status(201).json({
+            status: 'Success',
+            message: 'Application Successful',
+            data: application
+        })
     } catch (error) {
         console.log(error)
         return error;
