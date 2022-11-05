@@ -82,29 +82,23 @@ const login = async (req, res) => {
 
 }
 
+const getNewApplicantDetails = async (req, res) => {
+    let email = req.params.email
+    const getDetails = await db.any(queries.getNewApplicantDetails, [email])
+    return res.json({
+        details: getDetails
+    })
+}
+
 const apply = async (req, res) => {
     try {
 
         let { firstName, lastName, email, address, dob, university, cgpa, course, file, image, user_id } = req.body
-        if (!user_id) {
-            return res.status(401).json({
-                status: 'Failed',
-                message: 'Please login',
-            })
-        }
         const findApplication = await db.any(queries.findApplicationByEmail, [email]);
-        console.log(findApplication)
         if (findApplication.length > 0) {
             return res.status(400).json({
                 status: 'Failed',
                 message: 'User already applied'
-            })
-        }
-        const checkUserEmail = await db.any(`SELECT email FROM applicants WHERE email = '${email}'`)
-        if (checkUserEmail.length === 0) {
-            return res.status(400).json({
-                status: 'Failed',
-                message: 'Email unrecognized, apply with registered email'
             })
         }
         const application = await db.any(queries.registerApplication, [firstName, lastName, email, dob, address, university, course, cgpa, file, image, user_id])
@@ -205,6 +199,7 @@ const setScore = async (req, res) => {
 module.exports = {
     signup,
     login,
+    getNewApplicantDetails,
     apply,
     dashboardPic,
     updateAssessmentStatus,

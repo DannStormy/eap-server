@@ -4,6 +4,14 @@ const queries = {
             VALUES ($1, $2, $3, $4, $5) 
             RETURNING *;
     `,
+        getNewApplicantDetails: `
+                SELECT 
+                        firstname, lastname, email 
+                FROM 
+                        applicants 
+                WHERE 
+                        email = $1
+        `,
         registerApplication: `
             INSERT INTO application_data (firstname, lastname, email, dob, address, university, course, cgpa, cv, profilepic, applicant_id)
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)

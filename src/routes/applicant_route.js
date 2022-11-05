@@ -6,6 +6,7 @@ const checkAuth = require('../middleware/user_auth.js');
 
 router.post('/applicant/signup', applicant.signup);
 router.post('/applicant/login', applicant.login);
+router.get('/applicant/apply/:email', applicant.getNewApplicantDetails);
 router.post('/applicant/apply', checkAuth, applicant.apply);
 router.post('/applicant/dashboard', checkAuth, applicant.dashboardPic);
 router.post('/applicant/assessment-status', checkAuth, applicant.updateAssessmentStatus);
