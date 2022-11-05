@@ -92,8 +92,7 @@ const getNewApplicantDetails = async (req, res) => {
 
 const apply = async (req, res) => {
     try {
-
-        let { firstName, lastName, email, address, dob, university, cgpa, course, file, image, user_id } = req.body
+        let { firstname, lastname, email, address, dob, university, cgpa, course, file, image, user_id } = req.body
         const findApplication = await db.any(queries.findApplicationByEmail, [email]);
         if (findApplication.length > 0) {
             return res.status(400).json({
@@ -101,7 +100,7 @@ const apply = async (req, res) => {
                 message: 'User already applied'
             })
         }
-        const application = await db.any(queries.registerApplication, [firstName, lastName, email, dob, address, university, course, cgpa, file, image, user_id])
+        const application = await db.any(queries.registerApplication, [firstname, lastname, email, dob, address, university, course, cgpa, file, image, user_id])
         let status = null;
         let batch = await db.any(queries.getCurrentBatch);
         let batch_id = batch[0].max
