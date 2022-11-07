@@ -150,9 +150,13 @@ const updateApplicantStatus = async (req, res) => {
 
 const getAdminDashboardDetails = async (req, res) => {
     try {
-        const currentBatch = await db.any(queries.getCurrentBatch)
+        const currentBatch = await db.oneOrNone(queries.getCurrentBatch)
         const details = await db.any(queries.getAdminDashboardDetails)
-        const currentBatchCount = await db.any(queries.getCurrentBatchCount, [currentBatch[0].batch_id])
+        console.log('Here', currentBatch)
+        let currentBatchCount;
+        if (currentBatch) {
+            currentBatchCount = await db.any(queries.getCurrentBatchCount, [currentBatch.batch_id])
+        }
         const updates = await db.any(queries.getUpdates)
         const approved = await db.any(queries.getApprovedCount)
         // console.log(updates)
