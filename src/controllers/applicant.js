@@ -28,6 +28,7 @@ const signup = async (req, res) => {
 }
 
 const login = async (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
     let { email, password } = req.body;
     try {
         const existingEmail = await db.any(queries.findByEmail, [email]);
