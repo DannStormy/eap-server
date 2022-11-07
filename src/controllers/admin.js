@@ -105,7 +105,9 @@ const createApplication = async (req, res) => {
         console.log(req.body)
         let { batch_id, date, instructions, question, time } = req.body
         const questions = JSON.stringify(question)
-        const application = await db.any(queries.createApplication, [batch_id, date, instructions, questions, time])
+        let closed = false;
+        let running = true;
+        const application = await db.any(queries.createApplication, [batch_id, date, instructions, questions, time, closed, running])
         res.status(200).json({
             status: 'success',
             message: 'application created',
@@ -150,7 +152,7 @@ const getAdminDashboardDetails = async (req, res) => {
     try {
         const currentBatch = await db.any(queries.getCurrentBatch)
         const details = await db.any(queries.getAdminDashboardDetails)
-        const currentBatchCount = await db.any(queries.getCurrentBatchCount, [currentBatch[0].max])
+        const currentBatchCount = await db.any(queries.getCurrentBatchCount, [currentBatch[0].batch_id])
         const updates = await db.any(queries.getUpdates)
         const approved = await db.any(queries.getApprovedCount)
         // console.log(updates)
@@ -180,6 +182,11 @@ const applicationClosure = async (req, res) => {
         console.log(error)
         return error
     }
+}
+
+const updateApplicationClosure = async (req, res) => {
+    let { closed, running } = req.body
+    await db.any(queries.updateApplicationClosure, [closed, running])
 }
 const getAllAssessments = async (req, res) => {
     try {
@@ -227,6 +234,7 @@ module.exports = {
     getAllQuestions,
     getAdminDashboardDetails,
     applicationClosure,
+    updateApplicationClosure,
     getAllAssessments,
     composeAssessment,
     getAllBatches,

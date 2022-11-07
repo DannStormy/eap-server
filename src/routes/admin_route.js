@@ -5,6 +5,7 @@ const checkAuth = require('../middleware/user_auth.js');
 
 
 router.get('/admin/application-closure', admin.applicationClosure);
+router.put('/admin/application-closure', admin.updateApplicationClosure);
 router.get('/admin/all_batches', checkAuth, admin.getAllBatches);
 router.get('/admin/application-entries', checkAuth, admin.fetchApplications);
 router.post('/admin/application-by-batch', checkAuth, admin.fetchApplicationsByBatch);

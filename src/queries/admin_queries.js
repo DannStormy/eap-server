@@ -24,9 +24,9 @@ const queries = {
     getAllQuestions: `SELECT * FROM assessment`,
     createApplication: `
     INSERT INTO 
-        current_edition(batch_id, date, instructions, questions, time)
+        current_edition(batch_id, date, instructions, questions, time, closed, running)
     VALUES
-        ($1, $2, $3, $4, $5)
+        ($1, $2, $3, $4, $5, $6, $7)
     RETURNING *;
     `,
     getAdminDashboardDetails: `
@@ -39,12 +39,13 @@ const queries = {
         ($1, $2, $3, $4, $5, $6)
     RETURNING *
     `,
-    getCurrentBatch: `SELECT max(batch_id) FROM current_edition;`,
+    getCurrentBatch: `SELECT batch_id FROM current_edition WHERE running = true`,
     getCurrentBatchCount: `SELECT count(*) FROM application_status WHERE batch_id = $1`,
     getAllBatches: `SELECT batch_id from current_edition`,
     getUpdates: `SELECT * FROM current_edition`,
     getApprovedCount: `SELECT count(*) FROM application_status WHERE status = true;`,
-    getClosureDate: `SELECT date FROM current_edition ORDER BY date DESC LIMIT 1`,
+    getClosureDate: `SELECT date FROM current_edition WHERE running = true`,
+    updateApplicationClosure: `UPDATE current_edition SET closed = $1, running = $2 WHERE running = true`,
     getAllAssessments: `SELECT * FROM assessment`,
     composeAssessment: `INSERT into assessment (docs, time) VALUES ($1, $2) RETURNING *`
 }
