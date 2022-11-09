@@ -4,6 +4,8 @@ const applicant = require('../controllers/applicant.js');
 const checkAuth = require('../middleware/user_auth.js');
 
 
+router.post('/applicant/reset-password', applicant.resetPassword)
+router.put('/applicant/update-password', checkAuth, applicant.updatePassword)
 router.post('/applicant/signup', applicant.signup);
 router.post('/applicant/login', applicant.login);
 router.get('/applicant/apply/:email', applicant.getNewApplicantDetails);

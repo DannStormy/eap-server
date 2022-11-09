@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
+const sendEmail = require("../utils/sendEmail");
+
 
 const db = require('../config/config.js');
 const queries = require('../queries/applicants_queries.js');
@@ -30,6 +32,63 @@ const signup = async (req, res) => {
     } catch (err) {
         console.log(err)
         return err;
+    }
+}
+
+const resetPassword = async (req, res) => {
+    let { email } = req.body
+    try {
+        const existingEmail = await db.any(queries.findByEmail, [email]);
+        const applicant = await db.any(queries.getApplicantByEmail, [email])
+        if (existingEmail.length === 0) {
+            return res.status(401).json({
+                status: 'Failed',
+                message: 'No user with this email'
+            })
+        }
+        const sessionToken = jwt.sign(
+            {
+                email: applicant.email,
+            },
+            process.env.JWT_SECRET_KEY
+        );
+        if (applicant.length > 0) {
+
+            const link = `http://localhost:8080/password-reset/${email}/${sessionToken}`;
+            await sendEmail(email, "Password reset", link);
+
+
+            return res.status(200).json({
+                message: 'password reset link sent to your email account'
+            })
+        }
+    } catch (error) {
+        console.log(error)
+        return error
+    }
+}
+
+const updatePassword = async (req, res) => {
+    try {
+
+        let { password, email } = req.body
+        const applicant = await db.any(queries.getApplicantByEmail, [email]);
+        const passwordMatch = bcrypt.compareSync(password, applicant[0].password);
+        if (passwordMatch) {
+            return res.status(400).json({
+                status: 'Failed',
+                message: 'Cannot reset with same password'
+            })
+        }
+        password = bcrypt.hashSync(password, 10);
+
+        await db.oneOrNone(queries.updatePassword, [password, email])
+        return res.status(200).json({
+            message: 'Password Reset'
+        })
+    } catch (error) {
+        console.log(error)
+        return error
     }
 }
 
@@ -203,6 +262,8 @@ const setScore = async (req, res) => {
 }
 module.exports = {
     signup,
+    resetPassword,
+    updatePassword,
     login,
     getNewApplicantDetails,
     apply,
