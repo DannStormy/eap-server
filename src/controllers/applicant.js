@@ -14,6 +14,12 @@ const signup = async (req, res) => {
                 message: 'User already exists, please proceed to login'
             })
         }
+        if (!isNaN(phone) || phone.length !== 11) {
+            return res.status(400).json({
+                status: 'Failed',
+                message: 'Phone Number invalid'
+            })
+        }
         password = bcrypt.hashSync(password, 10);
         const applicant = await db.any(queries.registerApplicant, [firstName, lastName, email, phone, password])
         return res.status(201).json({
