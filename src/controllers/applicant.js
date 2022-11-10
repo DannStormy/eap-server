@@ -25,6 +25,7 @@ const signup = async (req, res) => {
         }
         password = bcrypt.hashSync(password, 10);
         const applicant = await db.any(queries.registerApplicant, [firstName, lastName, email, phone, password])
+        await sendEmail(email, "Welcome", 'You successfully registered for Enyata Academy');
         return res.status(201).json({
             status: 'Success',
             message: 'Registered Successfully',
