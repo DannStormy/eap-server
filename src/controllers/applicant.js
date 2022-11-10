@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
+const { JWT_TOKEN_EXPIRE } = require("../config/jwt");
 const sendEmail = require("../utils/sendEmail");
 
 
@@ -50,14 +51,13 @@ const resetPassword = async (req, res) => {
             {
                 email: applicant.email,
             },
-            process.env.JWT_SECRET_KEY
+            process.env.JWT_SECRET_KEY,
+            JWT_TOKEN_EXPIRE
         );
         if (applicant.length > 0) {
 
-            const link = `http://localhost:8080/password-reset/${email}/${sessionToken}`;
+            const link = `${process.env.HOST}/${email}/${sessionToken}`;
             await sendEmail(email, "Password reset", link);
-
-
             return res.status(200).json({
                 message: 'password reset link sent to your email account'
             })
